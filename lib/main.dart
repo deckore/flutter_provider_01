@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'fish_model.dart';
+import 'seafish_model.dart';
 
 void main() {
   runApp(const MainApp());
@@ -12,11 +13,18 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => FishModel(name: 'Salmon', number: 10, size: 'big'),
-      child: const MaterialApp(
-        home: FishOrder(),
-      ),
+    return MultiProvider (
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => FishModel(name: 'Salmon', number: 10, size: 'big')
+        ),
+        ChangeNotifierProvider(
+            create: (context) => SeaFishModel(name: 'Tuna', tunaNumber: 10, size: 'Middle')
+        ),
+    ],
+      child: MaterialApp(
+          home: FishOrder(),
+        ),
     );
   }
 }
@@ -115,7 +123,7 @@ class SpicyB extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(children: [
       Text(
-        'Fish Number: ${Provider.of<FishModel>(context).number}',
+        'Tuna Number: ${Provider.of<SeaFishModel>(context).tunaNumber}',
         style: TextStyle(
             fontSize: 16, color: Colors.red, fontWeight: FontWeight.bold),
       ),
@@ -126,6 +134,12 @@ class SpicyB extends StatelessWidget {
       ),
       SizedBox(
         height: 20,
+      ),
+      ElevatedButton(
+        onPressed: () {
+          Provider.of<SeaFishModel>(context, listen: false).changeFishNumber();
+        },
+        child: Text("Sea Fish Number"),
       ),
       Low(),
     ]);
